@@ -8,6 +8,8 @@ import '../models/ai_report.dart'; // For displaying report status or summary
 class HistoryScreen extends StatefulWidget {
   static const routeName = '/history';
 
+  const HistoryScreen({super.key});
+
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
@@ -41,16 +43,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Your Insights History')),
+      appBar: AppBar(title: const Text('Your Insights History')),
       body: FutureBuilder<List<UserQuestion>>(
         future: _historyFuture,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('An error occurred: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No history yet. Ask some questions!'));
+            return const Center(child: Text('No history yet. Ask some questions!'));
           } else {
             final historyItems = snapshot.data!;
             return ListView.builder(
@@ -58,41 +60,41 @@ class _HistoryScreenState extends State<HistoryScreen> {
               itemBuilder: (ctx, index) {
                 final item = historyItems[index];
                 return Card(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: ListTile(
                     title: Text(item.questionText, maxLines: 2, overflow: TextOverflow.ellipsis),
                     subtitle: Text('Asked on: ${item.timestamp.toLocal().toString().split(' ')[0]}'),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       if (item.questionId == null || item.questionId!.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: Missing question ID.")));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error: Missing question ID.")));
                         return;
                       }
                       showDialog(
                         context: context,
                         builder: (dialogCtx) => AlertDialog(
-                          title: Text("Question Details"),
+                          title: const Text("Question Details"),
                           content: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text("Question:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                const Text("Question:", style: TextStyle(fontWeight: FontWeight.bold)),
                                 Text(item.questionText),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 // You might want to resolve IDs to names here if you store AICharacter details in AppStateProvider
                                 Text("Tossed by Character ID: ${item.coinTosserId}"),
                                 Text("Report by Character ID: ${item.reportWriterId}"),
-                                SizedBox(height: 10),
-                                Text("Report Details:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 10),
+                                const Text("Report Details:", style: TextStyle(fontWeight: FontWeight.bold)),
                                 FutureBuilder<List<AIReport>>(
                                   future: _fetchReportsForQuestion(item.questionId!),
                                   builder: (context, reportSnapshot) {
                                     if (reportSnapshot.connectionState == ConnectionState.waiting) {
-                                      return Padding(padding: const EdgeInsets.all(8.0), child: CircularProgressIndicator());
+                                      return const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator());
                                     }
                                     if (reportSnapshot.hasError || !reportSnapshot.hasData || reportSnapshot.data!.isEmpty) {
-                                      return Text("No report found or error loading.", style: TextStyle(fontStyle: FontStyle.italic));
+                                      return const Text("No report found or error loading.", style: TextStyle(fontStyle: FontStyle.italic));
                                     }
                                     final report = reportSnapshot.data!.first;
                                     return Column(
@@ -100,21 +102,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       children: [
                                         Text("Status: ${reportStatusToString(report.status)}", style: TextStyle(color: report.status == ReportStatus.approved ? Colors.green.shade700 : Colors.orange.shade700)),
                                         if(report.status == ReportStatus.approved) ...[
-                                          SizedBox(height: 8),
-                                          Text("Content:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 8),
+                                          const Text("Content:", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Container(
-                                            padding: EdgeInsets.all(8),
+                                            padding: const EdgeInsets.all(8),
                                             decoration: BoxDecoration(
                                               border: Border.all(color: Colors.grey.shade300),
                                               borderRadius: BorderRadius.circular(4)
                                             ),
-                                            child: Text(report.reportText, style: TextStyle(fontSize: 13)),
+                                            child: Text(report.reportText, style: const TextStyle(fontSize: 13)),
                                           ),
                                         ] else if (report.status == ReportStatus.pendingReview) ...[
-                                            SizedBox(height: 8),
-                                            Text("This report is currently awaiting review by our team.", style: TextStyle(fontStyle: FontStyle.italic)),
+                                            const SizedBox(height: 8),
+                                            const Text("This report is currently awaiting review by our team.", style: TextStyle(fontStyle: FontStyle.italic)),
                                         ] else if (report.status == ReportStatus.rejected) ...[
-                                          SizedBox(height: 8),
+                                          const SizedBox(height: 8),
                                           Text("This report was not approved.", style: TextStyle(fontStyle: FontStyle.italic, color: Colors.red.shade700)),
                                         ],
                                       ],
@@ -124,7 +126,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               ],
                             ),
                           ),
-                          actions: [TextButton(child: Text("Close"), onPressed: () => Navigator.of(dialogCtx).pop())],
+                          actions: [TextButton(child: const Text("Close"), onPressed: () => Navigator.of(dialogCtx).pop())],
                         ),
                       );
                     },

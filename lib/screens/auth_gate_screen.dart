@@ -7,6 +7,8 @@ import 'onboarding_screen.dart';
 class AuthGateScreen extends StatelessWidget {
   static const routeName = '/auth-gate';
 
+  const AuthGateScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);

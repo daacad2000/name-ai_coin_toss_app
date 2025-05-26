@@ -15,7 +15,7 @@ class AIService {
   Future<QuestionValidationResult> validateQuestionWithAI(String questionText) async {
     // In a real app, this would call a Firebase Function.
     print("AI Service: Validating question - '$questionText' (calling backend function...)");
-    await Future.delayed(Duration(milliseconds: 1500)); // Simulate network call
+    await Future.delayed(const Duration(milliseconds: 1500)); // Simulate network call
 
     // Simulate validation logic (replace with actual Firebase Function call)
     if (questionText.isEmpty) {
@@ -48,7 +48,7 @@ class AIService {
   }) async {
     // In a real app, this would call a Firebase Function.
     print("AI Service: Generating report for question - '$originalQuestion' (calling backend function...)");
-    await Future.delayed(Duration(seconds: 3)); // Simulate network call
+    await Future.delayed(const Duration(seconds: 3)); // Simulate network call
 
     // Construct a prompt for your Gemini model on the backend.
     // The backend function will handle the actual API call to Gemini.

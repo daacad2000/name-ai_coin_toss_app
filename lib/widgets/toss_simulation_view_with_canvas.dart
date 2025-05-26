@@ -6,9 +6,9 @@ class TossSimulationViewWithCanvas extends StatefulWidget {
   final Function(int heads, int tails) onSimulationComplete;
 
   const TossSimulationViewWithCanvas({
-    Key? key,
+    super.key,
     required this.onSimulationComplete,
-  }) : super(key: key);
+  });
 
   @override
   _TossSimulationViewWithCanvasState createState() =>
@@ -121,7 +121,7 @@ class _TossSimulationViewWithCanvasState
               style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary),
             ),
             const SizedBox(height: 20),
-            Container(
+            SizedBox(
               width: 100,
               height: 100,
               child: CustomPaint(
@@ -147,7 +147,7 @@ class _TossSimulationViewWithCanvasState
               Column(
                 children: [
                   LinearProgressIndicator(value: (100 - _tossesRemaining) / 100, backgroundColor: Colors.grey.shade300, valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.secondary)),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Tosses Remaining: $_tossesRemaining',
                     style: theme.textTheme.titleMedium,
@@ -240,7 +240,7 @@ class CoinPainter extends CustomPainter {
     } else {
       paint.shader = RadialGradient(
         colors: [primaryFaceColor, secondaryFaceColor],
-        stops: [0.3, 1.0],
+        stops: const [0.3, 1.0],
         center: Alignment.center, radius: 0.7
       ).createShader(Rect.fromCircle(center: Offset(centerX, centerY), radius: radius));
       

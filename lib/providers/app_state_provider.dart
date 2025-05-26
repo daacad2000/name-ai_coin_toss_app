@@ -6,7 +6,7 @@ import '../services/database_service.dart'; // To load sun signs
 class AppStateProvider with ChangeNotifier {
   final DatabaseService _databaseService = DatabaseService(); // Or get from Provider
 
-  List<AICharacter> _availableCharacters = [
+  final List<AICharacter> _availableCharacters = [
     AICharacter(characterId: 'char1', name: 'Oracle Luna', avatarUrl: 'assets/images/oracle_luna.png', description: 'Wise and insightful.', role: AIChatacterRole.reportWriter, voiceTone: "calm"),
     AICharacter(characterId: 'char2', name: 'Flip Quantum', avatarUrl: 'assets/images/flip_quantum.png', description: 'Energetic coin tosser.', role: AIChatacterRole.coinTosser),
     AICharacter(characterId: 'char3', name: 'Analyst Prime', avatarUrl: 'assets/images/analyst_prime.png', description: 'Detailed reports.', role: AIChatacterRole.reportWriter, voiceTone: "analytical"),

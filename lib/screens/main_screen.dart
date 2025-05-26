@@ -16,6 +16,8 @@ import 'history_screen.dart';
 class MainScreen extends StatefulWidget {
   static const routeName = '/main';
 
+  const MainScreen({super.key});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -75,11 +77,11 @@ class _MainScreenState extends State<MainScreen> {
 
 
     if (questionText.isEmpty || authProvider.userId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter a question.')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a question.')));
       return;
     }
     if (appStateProvider.selectedCoinTosser == null || appStateProvider.selectedReportWriter == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select AI characters first.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select AI characters first.')));
         return;
     }
 
@@ -105,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
 
     DocumentReference? questionRef = await databaseService.saveUserQuestion(newQuestion);
     if (questionRef == null) {
-        if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error saving your question. Please try again.')));
+        if(mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error saving your question. Please try again.')));
         return;
     }
     _currentQuestionId = questionRef.id;
@@ -190,16 +192,16 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('AI Coin Toss Advisor'),
+        title: const Text('AI Coin Toss Advisor'),
         actions: [
           IconButton(
-            icon: Icon(Icons.history),
+            icon: const Icon(Icons.history),
             onPressed: () {
               Navigator.of(context).pushNamed(HistoryScreen.routeName);
             },
           ),
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () async {
               await authProvider.logout();
             },
@@ -207,21 +209,21 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text('Your AI Companions:', style: Theme.of(context).textTheme.titleLarge),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                     Expanded(child: _buildCharacterSelector(context, appStateProvider, true)),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(child: _buildCharacterSelector(context, appStateProvider, false)),
                 ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -231,14 +233,14 @@ class _MainScreenState extends State<MainScreen> {
                       controller: _questionController,
                       decoration: InputDecoration(
                         labelText: 'Enter your Yes/No question',
-                        border: OutlineInputBorder(),
-                        suffixIcon: appStateProvider.isQuestionValidating ? Padding(padding: EdgeInsets.all(8.0), child: SizedBox(width:20, height:20, child:CircularProgressIndicator(strokeWidth: 2))) : null,
+                        border: const OutlineInputBorder(),
+                        suffixIcon: appStateProvider.isQuestionValidating ? const Padding(padding: EdgeInsets.all(8.0), child: SizedBox(width:20, height:20, child:CircularProgressIndicator(strokeWidth: 2))) : null,
                       ),
                       maxLines: 3,
                       enabled: !appStateProvider.isCoinTossing && !appStateProvider.isReportGenerating && !_showSimulation,
                     ),
                     if (appStateProvider.questionValidationFeedback != null) ...[
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         appStateProvider.questionValidationFeedback!,
                         style: TextStyle(color: appStateProvider.questionValidationFeedback!.contains("good") ? Colors.green.shade700 : Colors.red.shade700),
@@ -248,13 +250,13 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text(appStateProvider.isCoinTossing || appStateProvider.isReportGenerating || _showSimulation ? 'Processing...' : 'Flip Coins & Get Insight'),
               onPressed: (appStateProvider.isCoinTossing || appStateProvider.isReportGenerating || _showSimulation) ? null : _submitQuestionAndStartFlow,
-              style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 16)),
+              style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+              child: Text(appStateProvider.isCoinTossing || appStateProvider.isReportGenerating || _showSimulation ? 'Processing...' : 'Flip Coins & Get Insight'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_showSimulation)
               TossSimulationViewWithCanvas(
                 onSimulationComplete: _handleSimulationComplete,
@@ -266,7 +268,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: Column(
                     children: [
                       Text('Final Toss Results:', style: Theme.of(context).textTheme.titleLarge),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Heads: ${appStateProvider.tossResults!['Heads']}, Tails: ${appStateProvider.tossResults!['Tails']}',
                         style: Theme.of(context).textTheme.headlineSmall,
@@ -275,10 +277,10 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (appStateProvider.reportStatusMessage != null)
               Card(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
@@ -321,8 +323,8 @@ class _MainScreenState extends State<MainScreen> {
     return DropdownButtonFormField<AICharacter>(
       decoration: InputDecoration(
         labelText: isTosser ? 'Coin Tosser' : 'Report Writer',
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15), // Adjusted padding
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15), // Adjusted padding
       ),
       value: selectedChar,
       isExpanded: true,
@@ -332,8 +334,8 @@ class _MainScreenState extends State<MainScreen> {
           child: Row(children: [
             // Image.network(char.avatarUrl, width: 20, height: 20, errorBuilder: (c,o,s) => Icon(Icons.person, size: 20)), // If using network URLs
             // For local assets, ensure they are in pubspec.yaml and project structure
-            Image.asset(char.avatarUrl, width: 24, height: 24, errorBuilder: (c,o,s) => Icon(Icons.person_pin_circle_outlined, size: 24)),
-            SizedBox(width: 8),
+            Image.asset(char.avatarUrl, width: 24, height: 24, errorBuilder: (c,o,s) => const Icon(Icons.person_pin_circle_outlined, size: 24)),
+            const SizedBox(width: 8),
             Expanded(child: Text(char.name, overflow: TextOverflow.ellipsis)),
           ]),
         );
